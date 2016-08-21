@@ -1,0 +1,29 @@
+wordpress:
+  image: wordpress
+  container_name: wp_wordpress
+  volumes:
+      - ./wordpress_shared:/shared
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 80:80
+
+wordpress_db:
+  image: mariadb
+  container_name: wp_mariadb
+  volumes:
+      - ./mysql_custom_config:/etc/mysql/conf.d
+      - ./mysql_bkp:/mysql_bkp
+  environment:
+    MYSQL_ROOT_PASSWORD: xxxx
+
+phpmyadmin:
+  image: corbinu/docker-phpmyadmin
+  container_name: wp_phpmyadmin
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 8181:80
+  environment:
+    MYSQL_USERNAME: root
+    MYSQL_ROOT_PASSWORD: xxxx
